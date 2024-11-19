@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manual de Instalación y Configuración</title>
+    <!-- Enlace a Tailwind CSS desde CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="font-sans text-gray-900 bg-gray-50">
+    <div class="max-w-4xl p-8 mx-auto">
+      <header class="mb-8">
+        <h1 class="text-4xl font-semibold text-center text-blue-600">
+          Manual de Instalación y Configuración
+        </h1>
+        <p class="mt-2 text-lg text-center text-gray-600">
+          Guía completa para desplegar la aplicación
+        </p>
+      </header>
+
+      <!-- Índice -->
+      <section class="mb-8">
+        <h2 class="mb-4 text-3xl font-semibold">Índice</h2>
+        <ul class="space-y-2 list-decimal list-inside">
+          <li>
+            <a href="#verificacion" class="text-blue-600 hover:underline"
+              >1. Verificación del sistema operativo</a
+            >
+          </li>
+          <li>
+            <a href="#instalacion" class="text-blue-600 hover:underline"
+              >2. Instalación de dependencias del sistema</a
+            >
+          </li>
+          <li>
+            <a href="#backend" class="text-blue-600 hover:underline"
+              >3. Configuración del backend</a
+            >
+          </li>
+          <li>
+            <a href="#levantar-backend" class="text-blue-600 hover:underline"
+              >4. Levantamiento del backend</a
+            >
+          </li>
+          <li>
+            <a href="#nginx" class="text-blue-600 hover:underline"
+              >5. Instalación y configuración de Nginx</a
+            >
+          </li>
+          <li>
+            <a href="#frontend" class="text-blue-600 hover:underline"
+              >6. Despliegue del frontend</a
+            >
+          </li>
+          <li>
+            <a
+              href="#verificacion-pruebas"
+              class="text-blue-600 hover:underline"
+              >7. Verificación y pruebas</a
+            >
+          </li>
+          <li>
+            <a href="#solucion-problemas" class="text-blue-600 hover:underline"
+              >8. Solución de problemas comunes</a
+            >
+          </li>
+        </ul>
+      </section>
+
+      <!-- Sección 1 -->
+      <section id="verificacion" class="mb-8">
+        <h2 class="mb-4 text-3xl font-semibold">
+          1. Verificación del sistema operativo
+        </h2>
+        <p class="mb-4">
+          Asegúrate de que estás utilizando una versión compatible de Ubuntu
+          (preferiblemente 20.04 LTS o superior).
+        </p>
+        <p class="mb-4">
+          Ejecuta el siguiente comando para verificar la versión:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+lsb_release -a
+            </pre
+        >
+        <p class="mb-4">La salida debe mostrar algo como:</p>
+        <pre class="p-4 bg-gray-200 rounded-md">
+Distributor ID: Ubuntu
+Description:    Ubuntu 20.04 LTS
+Release:        20.04
+Codename:       noble
+            </pre
+        >
+        <img
+          src="./so.png"
+          alt="Verificación del sistema operativo"
+          class="w-full mt-4 rounded-lg"
+        />
+      </section>
+
+      <!-- Sección 2 -->
+      <section id="instalacion" class="mb-8">
+        <h2 class="mb-4 text-3xl font-semibold">
+          2. Instalación de dependencias del sistema
+        </h2>
+
+        <h3 class="mt-4 text-2xl font-semibold">
+          2.1. Actualización del sistema
+        </h3>
+        <p class="mb-4">
+          Antes de instalar cualquier software, es recomendable actualizar el
+          sistema para asegurar que los paquetes estén al día. Ejecuta:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+sudo apt-get update && sudo apt-get upgrade -y
+            </pre
+        >
+
+        <h3 class="mt-4 text-2xl font-semibold">
+          2.2. Instalación de Node.js y npm
+        </h3>
+        <p class="mb-4">
+          Node.js es necesario para ejecutar el backend. Para instalarlo, puedes
+          usar el siguiente comando:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+sudo apt-get install -y nodejs
+            </pre
+        >
+        <p class="mb-4">
+          npm se instala junto con Node.js, pero si no lo tienes, instálalo de
+          la siguiente manera:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+sudo apt-get install -y npm
+            </pre
+        >
+        <p class="mb-4">
+          Verifica que Node.js y npm se hayan instalado correctamente:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+node -v
+npm -v
+            </pre
+        >
+
+        <h3 class="mt-4 text-2xl font-semibold">
+          2.3. Instalación de PostgreSQL
+        </h3>
+        <p class="mb-4">
+          Para el backend, utilizaremos PostgreSQL como sistema de gestión de
+          base de datos.
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+sudo apt-get install -y postgresql postgresql-contrib
+            </pre
+        >
+        <p class="mb-4">
+          Verifica que PostgreSQL esté funcionando correctamente con:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+sudo systemctl status postgresql
+            </pre
+        >
+        <img
+          src="./postgre.png"
+          alt="Instalación de PostgreSQL"
+          class="w-full mt-4 rounded-lg"
+        />
+      </section>
+
+      <!-- Sección 3 -->
+      <section id="backend" class="mb-8">
+        <h2 class="mb-4 text-3xl font-semibold">
+          3. Configuración del backend
+        </h2>
+        <h3 class="mt-4 text-2xl font-semibold">
+          3.1. Clonación del repositorio
+        </h3>
+        <p class="mb-4">
+          Clona el repositorio de tu aplicación desde GitHub o el repositorio
+          correspondiente:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+git clone https://github.com/Jheyson-Dev/analitica-back.git
+cd backend
+            </pre
+        >
+
+        <h3 class="mt-4 text-2xl font-semibold">
+          3.2. Instalación de dependencias del backend
+        </h3>
+        <p class="mb-4">
+          Una vez que el repositorio esté clonado, instala las dependencias
+          necesarias para el backend utilizando npm:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+npm install
+            </pre
+        >
+
+        <h3 class="mt-4 text-2xl font-semibold">
+          3.3. Configuración de la base de datos
+        </h3>
+        <p class="mb-4">
+          Para crear la base de datos y el usuario para la aplicación, sigue
+          estos pasos:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+sudo -u postgres psql
+CREATE DATABASE cabanilla;
+CREATE USER admin WITH ENCRYPTED PASSWORD 'admin';
+GRANT ALL PRIVILEGES ON DATABASE cabanilla TO admin;
+\q
+            </pre
+        >
+        <img
+          src="./BD.png"
+          alt="Configuración del backend"
+          class="w-full mt-4 rounded-lg"
+        />
+      </section>
+
+      <!-- Sección 4 -->
+      <section id="levantar-backend" class="mb-8">
+        <h2 class="mb-4 text-3xl font-semibold">
+          4. Levantamiento del backend
+        </h2>
+        <h3 class="mt-4 text-2xl font-semibold">
+          4.1. Compilación del backend
+        </h3>
+        <p class="mb-4">
+          Antes de ejecutar el backend en producción, asegúrate de compilar el
+          código:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+npm run build
+            </pre
+        >
+
+        <h3 class="mt-4 text-2xl font-semibold">
+          4.2. Uso de PM2 para gestión en producción
+        </h3>
+        <p class="mb-4">
+          PM2 es una herramienta para administrar aplicaciones Node.js en
+          producción, asegurando que se mantengan activas incluso después de un
+          reinicio del sistema.
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+sudo npm install -g pm2
+pm2 start dist/main.js --name "backend-app"
+pm2 startup
+pm2 save
+            </pre
+        >
+        <img
+          src="./backend.png"
+          alt="Configuración del backend"
+          class="w-full mt-4 rounded-lg"
+        />
+      </section>
+
+      <!-- Sección 5 -->
+      <section id="nginx" class="mb-8">
+        <h2 class="mb-4 text-3xl font-semibold">
+          5. Instalación y configuración de Nginx
+        </h2>
+        <h3 class="mt-4 text-2xl font-semibold">5.1. Instalación de Nginx</h3>
+        <p class="mb-4">
+          Nginx se utilizará como servidor web inverso para dirigir el tráfico
+          hacia el frontend:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+sudo apt-get install -y nginx
+            </pre
+        >
+
+        <h3 class="mt-4 text-2xl font-semibold">5.2. Configuración de Nginx</h3>
+        <p class="mb-4">
+          Configura Nginx para que redirija el tráfico HTTP al frontend. Crea un
+          archivo de configuración en:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+sudo nano /etc/nginx/sites-available/front
+            </pre
+        >
+        <p class="mb-4">Agrega la siguiente configuración:</p>
+        <pre class="p-4 bg-gray-200 rounded-md">
+server {
+    listen 80;
+    server_name 3.22.41.181;  # Reemplaza con tu IP pública o dominio
+
+    location / {
+        root /home/ubuntu/analitica-front/dist;  # Reemplaza con la ruta a tu carpeta dist
+        try_files $uri $uri/ /index.html;
+    }
+}
+            </pre
+        >
+        <p class="mb-4">Habilita la configuración y reinicia Nginx:</p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+sudo ln -s /etc/nginx/sites-available/front /etc/nginx/sites-enabled/
+sudo systemctl restart nginx
+            </pre
+        >
+      </section>
+
+      <!-- Sección 6 -->
+      <section id="frontend" class="mb-8">
+        <h2 class="mb-4 text-3xl font-semibold">6. Despliegue del frontend</h2>
+        <h3 class="mt-4 text-2xl font-semibold">
+          6.1. Compilación del frontend
+        </h3>
+        <p class="mb-4">
+          Dirígete al directorio del frontend y ejecuta la compilación:
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+npm run build
+            </pre
+        >
+        <h3 class="mt-4 text-2xl font-semibold">
+          6.2. Servir archivos estáticos
+        </h3>
+        <p class="mb-4">
+          Una vez compilado, puedes servir los archivos estáticos usando Nginx o
+          un servidor estático según prefieras.
+        </p>
+      </section>
+
+      <!-- Sección 7 -->
+      <section id="verificacion-pruebas" class="mb-8">
+        <h2 class="mb-4 text-3xl font-semibold">7. Verificación y pruebas</h2>
+        <p class="mb-4">
+          Accede a tu dominio o IP pública para verificar que el backend y
+          frontend estén funcionando correctamente.
+        </p>
+        <img
+          src="./front.png"
+          alt="Configuración del backend"
+          class="w-full mt-4 rounded-lg"
+        />
+      </section>
+
+      <!-- Sección 8 -->
+      <section id="solucion-problemas" class="mb-8">
+        <h2 class="mb-4 text-3xl font-semibold">
+          8. Solución de problemas comunes
+        </h2>
+        <p class="mb-4">
+          Si tienes problemas con la instalación, revisa los logs de Nginx y del
+          sistema para detectar posibles errores.
+        </p>
+        <pre class="p-4 overflow-auto text-white bg-gray-800 rounded-md">
+sudo journalctl -xe
+sudo tail -f /var/log/nginx/error.log
+            </pre
+        >
+      </section>
+    </div>
+  </body>
+</html>
